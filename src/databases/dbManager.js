@@ -153,7 +153,7 @@ export async function updateRental(rentalId) {
   const daysLate = dayjs().diff(rental.rentDate, "day");
   const delayFee = daysLate > rental.daysRented ? daysLate * game.pricePerDay : 0;
 
-  await connection.query(`UPDATE rentals SET "returnDate" = ${returnDate}, "delayFee" = ${delayFee} WHERE id = $1`, [
+  await connection.query(`UPDATE rentals SET "returnDate" = '${returnDate}', "delayFee" = ${delayFee} WHERE id = $1`, [
     rentalId,
   ]);
 }
