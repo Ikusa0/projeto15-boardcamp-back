@@ -28,6 +28,16 @@ export async function createRental(req, res) {
 export async function endRental(req, res) {
   try {
     const { id } = req.params;
+    
+    const rental = await findRentalById(id);
+    if (!rental) {
+      return res.sendStatus(404);
+    }
+    
+    if (rental.returnDate) {
+      return res.status(400).send("Aluguel já finalizado.");
+    }
+
     await updateRental(id);
 
     res.sendStatus(200);
@@ -47,7 +57,7 @@ export async function excludeRental(req, res) {
     }
 
     if (!rental.returnDate) {
-      return res.sendStatus(400);
+      return res.status(400).send("Aluguel ainda não finalizado.");
     }
 
     await deleteRental(id);

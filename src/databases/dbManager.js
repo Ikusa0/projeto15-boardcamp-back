@@ -149,7 +149,7 @@ export async function listRentals(gameId, customerId) {
 export async function updateRental(rentalId) {
   const rental = findRentalById(rentalId);
   const game = await findGameById(rental.gameId);
-  const returnDate = String(dayjs().format("YYYY-MM-DD"));
+  const returnDate = dayjs().format("YYYY-MM-DD");
   const daysLate = dayjs().diff(rental.rentDate, "day");
   const delayFee = daysLate > rental.daysRented ? daysLate * game.pricePerDay : 0;
 
