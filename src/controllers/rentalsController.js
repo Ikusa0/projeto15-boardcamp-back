@@ -1,4 +1,4 @@
-import { listRentals, insertRental, updateRental, deleteRental } from "../databases/dbManager.js";
+import { listRentals, insertRental, updateRental, deleteRental, findRentalById } from "../databases/dbManager.js";
 
 export async function getRentals(req, res) {
   try {
@@ -40,6 +40,16 @@ export async function endRental(req, res) {
 export async function excludeRental(req, res) {
   try {
     const { id } = req.params;
+
+    const rental = await findRentalById(id);
+    if (!rental) {
+      return res.sendStatus(404);
+    }
+
+    if (!rental.returnDate) {
+      return res.sendStatus(400);
+    }
+
     await deleteRental(id);
 
     res.sendStatus(200);
