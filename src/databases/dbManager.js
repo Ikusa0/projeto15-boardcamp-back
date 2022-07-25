@@ -144,11 +144,15 @@ export async function listRentals(gameId, customerId) {
 export async function updateRental(rentalId) {
   const { rows: rental } = await connection.query("SELECT * FROM rentals WHERE id = $1", [rentalId]);
   const game = await findGameById(rental[0].gameId);
-  const returnDate = dayjs().format("YYYY-MM-DD");
+  const returnDate = String(dayjs().format("YYYY-MM-DD"));
   const daysLate = dayjs().diff(rental[0].rentDate, "day");
   const delayFee = daysLate > rental[0].daysRented ? daysLate * game.pricePerDay : 0;
 
   await connection.query(`UPDATE rentals SET "returnDate" = ${returnDate}, "delayFee" = ${delayFee} WHERE id = $1`, [
     rentalId,
   ]);
+}
+
+export async function deleteRental(rentalId) {
+  await connection.query(`DELETE FROM rentals WHERE id = $1`, [rentalId]);
 }

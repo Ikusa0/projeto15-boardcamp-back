@@ -1,4 +1,4 @@
-import { listRentals, insertRental, updateRental } from "../databases/dbManager.js";
+import { listRentals, insertRental, updateRental, deleteRental } from "../databases/dbManager.js";
 
 export async function getRentals(req, res) {
   try {
@@ -29,7 +29,19 @@ export async function endRental(req, res) {
   try {
     const { id } = req.params;
     await updateRental(id);
-    
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Error while ending rental", err.message);
+    res.sendStatus(500);
+  }
+}
+
+export async function excludeRental(req, res) {
+  try {
+    const { id } = req.params;
+    await deleteRental(id);
+
     res.sendStatus(200);
   } catch (err) {
     console.error("Error while ending rental", err.message);
